@@ -5,39 +5,42 @@ using namespace std;
 
 class Student {
 public:
-	Student(char ID, char name[], char course[], double JavascriptGrade, double DataStructureGrade);
+	Student(string ID, string name, string course, double JavaScriptGrade, double DataStructureGrade);
 	~Student();
-	char showID();
-	char showName();
-	char showCourse();
+	void display();
 private:
-	char ID[20];
-	char name[20];
-	char course[20];
+	string ID;
+	string name;
+	string course;
 	double grade1;
 	double grade2;
 	double averageGrade;
 };
 
-Student::Student(char ID, char name[], char course[], double JavascriptGrade, double DataStructureGrade) {
-	strcpy(this->ID, ID);
-	strcpy(this->name, name);
-	strcpy(this->course, course);
-	this->grade1 = JavascriptGrade;
+Student::Student(string ID, string name, string course, double JavaScriptGrade, double DataStructureGrade) {
+	this->ID = ID;
+	this->name = name;
+	this->grade1 = JavaScriptGrade;
 	this->grade2 = DataStructureGrade;
-	averageGrade = (JavascriptGrade + DataStructureGrade) / 2;
+	this->averageGrade = (grade1 + grade2) / 2;
 }
 
 Student::~Student() {
 
 }
 
-
+void Student::display() {
+	cout << "ID:" << ID << endl; 
+	cout << "name:" << name << endl;
+	cout << "JavaScriptGrade: " << grade1 << endl;
+	cout << "DataStructureGrade: " <<grade2 << endl;
+	cout << "AverageGrade:: "<< averageGrade << endl;
+	cout << endl;
+}
 
 int main(void) {
 	Student SakuraNeko("2014210774", "SakuraNeko", "JavaScript", 99.99, 88.88);
-	cout << SakuraNeko.ID << endl;
-	cout << SakuraNeko.name << endl
-	cout << SakuraNeko.course << endl;
-	cout << SakuraNeko.averageGrade << endl
+	Student SakuraNekoSon("2014210779", "LiuYongZhuo", "C++", 0.99, 8.88);
+	SakuraNeko.display();
+	SakuraNekoSon.display();
 }
