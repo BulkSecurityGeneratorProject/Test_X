@@ -63,9 +63,3 @@ public:
 		Teacher::display();
 	}
 };
-
-int main(void) {
-	StudentTeacher SakuraNeko("SakuraNeko", "male", "Teacher", "SoftWare");
-	SakuraNeko.display();
-	return 0;
-}
