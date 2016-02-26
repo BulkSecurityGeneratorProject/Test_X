@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:A449sdafasdf1379dsf73xfdsaaxazzh@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:A44913asd7973xsadaxdsazzh@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -32,8 +32,16 @@ app.use(orm.express("mysql://SakuraNeko:A449sdafasdf1379dsf73xfdsaaxazzh@120.24.
 
 //register
 app.post("/register", function(req, res) {
-  console.log(req);
-  //console.log(registerInfo);
+  var registerInfo = {
+    phone: req.query.phone,
+    loginPWD: req.query.loginPWD,
+    height: req.query.height,
+    sexType: req.query.sexType,
+    age: req.query.age,
+    created: req.query.created,
+    Uid: req.query.Uid
+  };
+  console.log(registerInfo);
 });
 
 //getUserInfo
