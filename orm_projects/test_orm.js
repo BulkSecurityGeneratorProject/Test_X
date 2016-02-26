@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:A449137973xaxazzh@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:A449sdafasdf1379dsf73xfdsaaxazzh@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -33,6 +33,7 @@ app.use(orm.express("mysql://SakuraNeko:A449137973xaxazzh@120.24.6.29/Demo", {
 //register
 app.post("/register", function(req, res) {
   console.log(req);
+  //console.log(registerInfo);
 });
 
 //getUserInfo
