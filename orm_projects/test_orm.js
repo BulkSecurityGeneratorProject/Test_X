@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:psw@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:PSW@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -42,21 +42,35 @@ app.post("/register", function(req, res) {
     Uid: req.query.Uid
   };
 
-  req.models.user.create({
-    phone: registerInfo.phone,
-    loginPWD: registerInfo.loginPWD,
-    height: registerInfo.height,
-    sexType: registerInfo.sexType,
-    age: registerInfo.age,
-    created: registerInfo.created,
-    Uid: registerInfo.Uid
-  },function(err, results) {
-    var androidResults = {
-      status: "True",
-      api: "/register",
-      results
-    };
-    res.send(androidResults);
+  req.models.user.exists({
+    phone: registerInfo.phone
+  }, function(err, exists) {
+    if(exists) {
+      res.send(
+        {
+          code: "1003",
+          msg: "Invalid Arguments",
+          sub_msg: "手机号已经被注册"
+        }
+      );
+    } else {
+      req.models.user.create({
+        phone: registerInfo.phone,
+        loginPWD: registerInfo.loginPWD,
+        height: registerInfo.height,
+        sexType: registerInfo.sexType,
+        age: registerInfo.age,
+        created: registerInfo.created,
+        Uid: registerInfo.Uid
+      }, function(err, results) {
+         var androidResults = {
+           status: "True",
+           api: "/register",
+           results
+         };
+         res.send(androidResults);
+      });
+    }
   });
 });
 
