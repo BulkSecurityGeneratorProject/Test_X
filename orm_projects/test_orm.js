@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:PSW@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -20,10 +20,14 @@ app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
 
     //add the RECORD table
     models.record = db.define("RECORD", {
-      TIME: String,
-      PRESSURE1: Number,
-      PRESSURE2: Number,
-      PRESSURE3: Number
+      time: String,
+      Uid: Number,
+      left1: String,
+      left2: String,
+      left3: String,
+      right1: String,
+      right2: String,
+      right3: String
       }
     );
     next();
@@ -77,7 +81,6 @@ app.post("/register", function(req, res) {
 app.get("/login", function(req, res, next) {
   req.models.user.exists({phone: req.query.phone}, function(err, exists) {
     if(exists) {
-      var havePhone = true;
       next();
     } else {
       var androidResults = {
@@ -92,10 +95,8 @@ app.get("/login", function(req, res, next) {
 });
 
 app.get("/login", function(req, res, next) {
-  console.log(req);
   req.models.user.find({phone: req.query.phone, loginPWD: req.query.loginPWD}, function(err, results) {
     var correctJson = JSON.stringify(results);
-    console.log(correctJson);
     if(correctJson != "[]") {
       var androidResults = {
         status: "true",
@@ -117,5 +118,36 @@ app.get("/login", function(req, res, next) {
   });
 });
 
+//Upload data
+app.post("/upload", function(req, res, next) {
+  var uploadInfo = {
+    time: req.query.time,
+    Uid: req.query.Uid,
+    left1: req.query.left1,
+    left2: req.query.left2,
+    left3: req.query.left3,
+    right1: req.query.right1,
+    right2: req.query.right2,
+    right3: req.query.right3
+  };
+
+  req.models.record.create({
+    time: uploadInfo.time,
+    Uid: uploadInfo.Uid,
+    left1: uploadInfo.left1,
+    left2: uploadInfo.left2,
+    left3: uploadInfo.left3,
+    right1: uploadInfo.right1,
+    right2: uploadInfo.right2,
+    right3: uploadInfo.right3
+  }, function(err, results) {
+     var androidResults = {
+       status: "True",
+       api: "/upload",
+       results
+     };
+     res.send(androidResults);
+  });
+});
 
 app.listen(80);
