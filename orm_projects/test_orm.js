@@ -74,10 +74,7 @@ app.post("/register", function(req, res) {
 });
 
 //login
-var phoneTmp, loginPWDTmp;
 app.get("/login", function(req, res, next) {
-  phoneTmp = req.query.phone;
-  loginPWDTmp = req.query.loginPWD;
   req.models.user.exists({phone: req.query.phone}, function(err, exists) {
     if(exists) {
       var havePhone = true;
@@ -94,32 +91,27 @@ app.get("/login", function(req, res, next) {
   });
 });
 
-app.get("/login", function(req, res, next) {
-  console.log(phoneTmp);
-  console.log(loginPWDTmp);
-  req.models.user.find({phone: phoneTmp, loginPWD: loginPWDTmp}, function(err, results) {
-    console.log(results);
-    if(results) {
-      var androidResults = {
-        status: "true",
-        api: "login",
-        user: {
-          created: results.created,
-          Uid: results.Uid
-        }
-      };
-      res.send(androidResults);
-    } else {
-      var androidResults = {
-        status: "false",
-        code: "1001",
-        api: "login",
-        sub_msg: "用户名和密码不匹配"
-      };
-      res.send(androidResults);
-    }
-  });
-});
+// app.get("/login", function(req, res, next) {
+//   console.log(req);
+//   req.models.user.find({phone: req.query.phone, loginPWD: req.query.loginPWD}, function(err, results) {
+//     if(results != null) {
+//       // var androidResults = {
+//       //   status: "true",
+//       //   api: "login",
+//       //   results
+//       // };
+//       res.send(results);
+//     } else {
+//       var androidResults = {
+//         status: "false",
+//         code: "1001",
+//         api: "login",
+//         sub_msg: "用户名和密码不匹配"
+//       };
+//       res.send(androidResults);
+//     }
+//   });
+// });
 
 //
 //   req.models.user.exists({phone: req.query.phone}, function(err, exists){
@@ -159,10 +151,38 @@ app.get("/login", function(req, res, next) {
 //   });
 // });
 
-app.get("/record", function(req, res) {
-  req.models.user.find({ID: req.query.ID}, function(err, results) {
-    res.send(results);
+// app.get("/record", function(req, res) {
+//   req.models.user.find({ID: req.query.ID}, function(err, results) {
+//     console.log(results);
+//     res.send(results);
+//   });
+// });
+
+app.get("/login", function(req, res, next) {
+  console.log(req);
+  req.models.user.find({phone: req.query.phone, loginPWD: req.query.loginPWD}, function(err, results) {
+    var correctJson = JSON.stringify(results);
+    console.log(correctJson);
+    if(correctJson != "[]") {
+      var androidResults = {
+        status: "true",
+        api: "login",
+        user: {
+          results
+        }
+      };
+      res.send(androidResults);
+    } else {
+      var androidResults = {
+        status: "false",
+        code: "1001",
+        api: "login",
+        sub_msg: "用户名和密码不匹配"
+      };
+      res.send(androidResults);
+    }
   });
 });
+
 
 app.listen(80);
