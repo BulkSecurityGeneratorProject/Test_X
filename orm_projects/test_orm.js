@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:PSW@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -42,12 +42,11 @@ app.post("/register", function(req, res) {
     Uid: req.query.Uid
   };
 
-  req.models.user.exists({
-    phone: registerInfo.phone
-  }, function(err, exists) {
+  req.models.user.exists({phone: registerInfo.phone}, function(err, exists) {
     if(exists) {
       res.send(
         {
+          status: "false",
           code: "1003",
           msg: "Invalid Arguments",
           sub_msg: "手机号已经被注册"
@@ -74,15 +73,94 @@ app.post("/register", function(req, res) {
   });
 });
 
-//getUserInfo
-app.get("/getUserInfo", function(req, res) {
-	req.models.user.find({id: req.query.id}, function(err, results) {
-		res.send(results);
-	});
+//login
+var phoneTmp, loginPWDTmp;
+app.get("/login", function(req, res, next) {
+  phoneTmp = req.query.phone;
+  loginPWDTmp = req.query.loginPWD;
+  req.models.user.exists({phone: req.query.phone}, function(err, exists) {
+    if(exists) {
+      var havePhone = true;
+      next();
+    } else {
+      var androidResults = {
+        status: "false",
+        code: "1004",
+        api: "login",
+        sub_msg: "用户名不存在"
+      };
+      res.send(androidResults);
+    }
+  });
 });
 
+app.get("/login", function(req, res, next) {
+  console.log(phoneTmp);
+  console.log(loginPWDTmp);
+  req.models.user.find({phone: phoneTmp, loginPWD: loginPWDTmp}, function(err, results) {
+    console.log(results);
+    if(results) {
+      var androidResults = {
+        status: "true",
+        api: "login",
+        user: {
+          created: results.created,
+          Uid: results.Uid
+        }
+      };
+      res.send(androidResults);
+    } else {
+      var androidResults = {
+        status: "false",
+        code: "1001",
+        api: "login",
+        sub_msg: "用户名和密码不匹配"
+      };
+      res.send(androidResults);
+    }
+  });
+});
+
+//
+//   req.models.user.exists({phone: req.query.phone}, function(err, exists){
+//     var phoneTmp = req.query.phoneTmp;
+//     var loginPWDTmp = req.query.loginPWD;
+//     if(exists) {
+//       req.models.user.find({phone: phoneTmp, loginPWD: loginPWDTmp}, function(err, results){
+//         if(results) {
+//           var androidResults = {
+            // status: "true",
+            // api: "login",
+            // user: {
+            //   created: results.created,
+            //   Uid: results.Uid
+            // }
+//           };
+//           res.send(androidResults)
+//         } else {
+          // var androidResults = {
+          //   status: "false",
+          //   code: "1001",
+          //   api: "login",
+          //   sub_msg: "用户名和密码不匹配"
+          // }
+//           res.send(androidResults);
+//         }
+//       });
+//     } else {
+//       var androidResults = {
+//         status: "false",
+//         code: "1004",
+//         api: "login",
+//         sub_msg: "用户名不存在"
+//       };
+//       res.send(androidResults);
+//     }
+//   });
+// });
+
 app.get("/record", function(req, res) {
-  req.models.record.find({ID: req.query.ID}, function(err, results) {
+  req.models.user.find({ID: req.query.ID}, function(err, results) {
     res.send(results);
   });
 });
