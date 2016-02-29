@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:PSW@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -132,8 +132,8 @@ app.post("/upload", function(req, res, next) {
   };
 
   req.models.record.create({
-    time: uploadInfo.time,
     Uid: uploadInfo.Uid,
+    time: uploadInfo.time,
     left1: uploadInfo.left1,
     left2: uploadInfo.left2,
     left3: uploadInfo.left3,
@@ -141,13 +141,66 @@ app.post("/upload", function(req, res, next) {
     right2: uploadInfo.right2,
     right3: uploadInfo.right3
   }, function(err, results) {
-     var androidResults = {
-       status: "True",
-       api: "/upload",
-       results
-     };
+
+    if(results) {
+      var androidResults = {
+        status: "True",
+        api: "/upload",
+        results
+      };
+    } else {
+      var androidResults = {
+        status: "Falsee",
+        api: "/upload",
+        code: "1000",
+        sub_msg: "服务器存储数据错误"
+      }
+    }
      res.send(androidResults);
   });
 });
 
+//Find data
+
+app.get("/findData", function(req, res, next) {
+  req.models.record.exists({Uid: req.query.Uid , time: req.query.time}, function(err, exists) {
+    if(exists) {
+      next();
+    } else {
+      var androidResults = {
+        status: "false",
+        code: "1009",
+        api: "/findData",
+        sub_msg: "后台服务器数据不存在"
+      };
+      res.send(androidResults);
+    }
+  });
+});
+
+app.get("/findData", function(req, res, next) {
+  req.models.record.find({Uid: req.query.Uid , time: req.query.time}, function(err, results) {
+    var getRecord = {
+      Uid: req.query.Uid,
+      time: req.query.time
+    };
+    var correctJson = JSON.stringify(results);
+    if(correctJson != "[]") {
+      var androidResults = {
+        status: "true",
+        api: "/findData",
+        results
+      };
+      res.send(androidResults);
+    } else {
+      var androidResults = {
+        status: "false",
+        code: "1000",
+        api: "/findData",
+        sub_msg: "服务器存储数据错误"
+      };
+      res.send(err);
+    }
+  });
+});
 app.listen(80);
