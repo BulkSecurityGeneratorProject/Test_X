@@ -3,7 +3,7 @@ var request = require('request');
 var orm = require('orm');
 var app = express();
 
-app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
+app.use(orm.express("mysql://SakuraNeko:A449137973xaxazzh@120.24.6.29/Demo", {
   define: function (db, models, next) {
 
     //add the USER table
@@ -27,7 +27,11 @@ app.use(orm.express("mysql://SakuraNeko:PWD@120.24.6.29/Demo", {
       left3: String,
       right1: String,
       right2: String,
-      right3: String
+      right3: String,
+      steps: String,
+      weights: String,
+      rt: Number,
+      lt: Number
       }
     );
     next();
@@ -43,7 +47,6 @@ app.post("/register", function(req, res) {
     sexType: req.query.sexType,
     age: req.query.age,
     created: req.query.created,
-    Uid: req.query.Uid
   };
 
   req.models.user.exists({phone: registerInfo.phone}, function(err, exists) {
@@ -64,7 +67,7 @@ app.post("/register", function(req, res) {
         sexType: registerInfo.sexType,
         age: registerInfo.age,
         created: registerInfo.created,
-        Uid: registerInfo.Uid
+        Uid: parseInt(1000000000*Math.random())
       }, function(err, results) {
          var androidResults = {
            status: "True",
@@ -86,7 +89,7 @@ app.get("/login", function(req, res, next) {
       var androidResults = {
         status: "false",
         code: "1004",
-        api: "login",
+        api: "/login",
         sub_msg: "用户名不存在"
       };
       res.send(androidResults);
@@ -100,9 +103,10 @@ app.get("/login", function(req, res, next) {
     if(correctJson != "[]") {
       var androidResults = {
         status: "true",
-        api: "login",
+        api: "/login",
         user: {
-          results
+          results:results,
+          correctJson
         }
       };
       res.send(androidResults);
@@ -110,7 +114,7 @@ app.get("/login", function(req, res, next) {
       var androidResults = {
         status: "false",
         code: "1001",
-        api: "login",
+        api: "/login",
         sub_msg: "用户名和密码不匹配"
       };
       res.send(androidResults);
@@ -128,7 +132,11 @@ app.post("/upload", function(req, res, next) {
     left3: req.query.left3,
     right1: req.query.right1,
     right2: req.query.right2,
-    right3: req.query.right3
+    right3: req.query.right3,
+    steps: req.query.steps,
+    weights: req.query.weights,
+    rt: req.query.rt,
+    lt: req.query.lt
   };
 
   req.models.record.create({
@@ -139,7 +147,11 @@ app.post("/upload", function(req, res, next) {
     left3: uploadInfo.left3,
     right1: uploadInfo.right1,
     right2: uploadInfo.right2,
-    right3: uploadInfo.right3
+    right3: uploadInfo.right3,
+    steps: uploadInfo.steps,
+    weights: uploadInfo.weights,
+    rt: uploadInfo.rt,
+    lt: uploadInfo.lt
   }, function(err, results) {
 
     if(results) {
@@ -150,7 +162,7 @@ app.post("/upload", function(req, res, next) {
       };
     } else {
       var androidResults = {
-        status: "Falsee",
+        status: "False",
         api: "/upload",
         code: "1000",
         sub_msg: "服务器存储数据错误"
@@ -163,6 +175,12 @@ app.post("/upload", function(req, res, next) {
 //Find data
 
 app.get("/findData", function(req, res, next) {
+  console.log(req);
+  var uidResult = parseInt(req.query.Uid);
+
+  console.log(req.query.Uid);
+  console.log(typeof(req.query.Uid));
+  console.log(uidResult);
   req.models.record.exists({Uid: req.query.Uid , time: req.query.time}, function(err, exists) {
     if(exists) {
       next();
@@ -197,7 +215,7 @@ app.get("/findData", function(req, res, next) {
         status: "false",
         code: "1000",
         api: "/findData",
-        sub_msg: "服务器存储数据错误"
+        sub_msg: "后台处理数据错误"
       };
       res.send(err);
     }
