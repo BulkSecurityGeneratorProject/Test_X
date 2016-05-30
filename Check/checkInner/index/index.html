@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jike</title>
+    <title>签到</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
@@ -33,48 +33,64 @@
               <span class = "icon-bar"></span>
               <span class = "icon-bar"></span>
           </button>
-          <a class = "navbar-brand">项目演示</a>
+          <a class = "navbar-brand">签到</a>
         </div>
         <div id = "navbar" class = "collapse navbar-collapse">
           <ul class = "nav navbar-nav">
             <li><a href = "">首页</a></li>
-            <li><a href = "">标签一</a></li>
-            <li><a href = "">标签二</a></li>
-            <li><a href = "">标签三</a></li>
-            <li><a href = "">标签四</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <header class = "jumbotron">
-      <img src = "images/img1.jpg" class = "image" id = "imageId">
-      <p class = "lead">我是示例第一行</p>
-      <p><a class = "btn btn-lg btn-default btn-getting-stared" role = "button" id = "next">下一张</a></p>
-    </header>
+    <div class = "jumbotron">
+      <!-- Banner image -->
+      <div id = "imageShow">
+          <img src = "img/img1.jpg" class = "image" id = "imageId">
+      </div>
+      <!-- imformation -->
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div id = "outInformation">
+            <h4>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp您好，欢迎参加由教育部思想政治工作司主办，教育部高校辅导员培训和研修基地（华中师范大学）承办的第142期全国高校辅导员示范培训暨“高校学生工作信息化创新发展理论与实务”专题培训班。请输入您的姓名进行签到。</h4>
+            </br>
+          </div>
+          <!-- enterName -->
+          <div id = "name">
+            <div class = "row">
+              <div class = "col-lg-12">
+                <div class = "input-group">
+                  <input type = "text" class = "form-control" placeholder = "请输入您的姓名" id = "inputName">
+                  <span class = "input-group-btn">
+                    <button class = "btn btn-default" type = "button" id = "checkBtn">确认</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-12 -->
+            </div><!-- /.row -->
+          </div>
 
-    <main class = "benefits container">
-      <div class = "row">
-        <div class = "col-md-6">
-          <h2>我是第一行</h2>
-          <p>我是一行一列</p>
-        </div>
-        <div class = "col-md-6">
-          <h2>我是第一行</h2>
-          <p>我是一行二列</p>
-        </div>
-      </div>
-      <div class = "row">
-        <div class = "col-md-6">
-          <h2>我是第二行</h2>
-          <p>我是二行一列</p>
-        </div>
-        <div class = "col-md-6">
-          <h2>我是第二行</h2>
-          <p>我是二行二列</p>
+          <div class="panel-body">
+            <div id = "innerInformationOne">
+              <h4>签到成功！请到前台预约房间</h4>
+              </br>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div id = "innerInformationTwo">
+              <h4>签到失败，您的名字输入有误</h4>
+              </br>
+            </div>
+          </div>
+
         </div>
       </div>
-    </main>
+    </div>
+
+    <div class = "footer">
+      <p>华中师范大学</p>
+      <p>powered by sakuraneko</p>
+    </div>
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
@@ -98,7 +114,7 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <script src="js/main.js"></script>
     <!-- endbuild -->
   </body>
 </html>

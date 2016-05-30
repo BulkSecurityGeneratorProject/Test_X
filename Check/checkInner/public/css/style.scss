@@ -53,10 +53,6 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-  }
 }
 
 /* Supporting marketing content */
@@ -92,6 +88,33 @@ body {
   }
 }
 
-#imageId {
+#name {
+  margin-left: 10%;
   width: 80%;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 10%;
+}
+
+#imageId {
+  width: 100%;
+}
+
+.jumbotron {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+#outInformation {
+  text-align:justify;
+}
+
+#innerInformationOne {
+  display: none;
+}
+
+#innerInformationTwo {
+  display: none;
 }
